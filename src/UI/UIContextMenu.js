@@ -142,23 +142,51 @@ function UIContextMenu(options){
         // close menu and, if exists, its parent
         if(!$(this).hasClass('context-menu-item-submenu')){
             $(`#context-menu-${menu_id}, .context-menu[data-element-id="${$(this).closest('.context-menu').attr('data-parent-id')}"]`).fadeOut(200, function(){
-                $(contextMenu).remove();
+                $(contextMenu).delay(1000).remove();
             });
         }
 
         return false;
     });
 
-    // when mouse is over an item    
+    // when mouse is over an item
+
+    //if submenu is open, sleep mouseover event for 1 second
+
     $(contextMenu).find('.context-menu-item').on('mouseover', function (e) {
-        // mark other items as inactive
         $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
+        console.log("remove active", contextMenu)
         // mark this item as active
         $(this).addClass('context-menu-item-active');
+        console.log("make active", contextMenu)
         // close any submenu that doesn't belong to this item
         $(`.context-menu[data-parent-id="${menu_id}"]`).remove();
+        console.log("remove submenu", contextMenu)
         // mark this context menu as active
         $(contextMenu).addClass('context-menu-active');
+        console.log("make new menu active", contextMenu)
+
+        // if submenu is open, sleep mouseover event for 1 second
+
+        // if($(this).attr('data-has-submenu') === 'true' && $(this).hasClass('context-menu-item-active')){;
+        //     setTimeout(() => {
+        //         // mark other items as inactive
+        //         $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
+        //         console.log("remove active", contextMenu)
+        //         // mark this item as active
+        //         $(this).addClass('context-menu-item-active');
+        //         console.log("make active", contextMenu)
+        //         // close any submenu that doesn't belong to this item
+        //         $(`.context-menu[data-parent-id="${menu_id}"]`).remove();
+        //         console.log("remove submenu", contextMenu)
+        //         // mark this context menu as active
+        //         $(contextMenu).addClass('context-menu-active');
+        //         console.log("make new menu active", contextMenu)
+        //     }, 500)
+        // }   
+
+        //this is closing the submenu prematurely
+        
     })
 
     // open submenu if applicable
