@@ -150,51 +150,72 @@ function UIContextMenu(options){
     });
 
     // when mouse is over an item
+    //this is closing the submenu prematurely
 
-    //if submenu is open, sleep mouseover event for 1 second
 
-    $(contextMenu).find('.context-menu-item').on('mouseover', function (e) {
-        $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
-        console.log("remove active", contextMenu)
-        // mark this item as active
-        $(this).addClass('context-menu-item-active');
-        console.log("make active", contextMenu)
-        // close any submenu that doesn't belong to this item
-        $(`.context-menu[data-parent-id="${menu_id}"]`).remove();
-        console.log("remove submenu", contextMenu)
-        // mark this context menu as active
-        $(contextMenu).addClass('context-menu-active');
-        console.log("make new menu active", contextMenu)
 
-        // if submenu is open, sleep mouseover event for 1 second
+   
 
-        // if($(this).attr('data-has-submenu') === 'true' && $(this).hasClass('context-menu-item-active')){;
-        //     setTimeout(() => {
-        //         // mark other items as inactive
-        //         $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
-        //         console.log("remove active", contextMenu)
-        //         // mark this item as active
-        //         $(this).addClass('context-menu-item-active');
-        //         console.log("make active", contextMenu)
-        //         // close any submenu that doesn't belong to this item
-        //         $(`.context-menu[data-parent-id="${menu_id}"]`).remove();
-        //         console.log("remove submenu", contextMenu)
-        //         // mark this context menu as active
-        //         $(contextMenu).addClass('context-menu-active');
-        //         console.log("make new menu active", contextMenu)
-        //     }, 500)
-        // }   
+    
 
-        //this is closing the submenu prematurely
+    //if conxtext menu is active
+    if($(contextMenu).hasClass('context-menu-active')){
+        //and when mouse is over an item
+        $(contextMenu).find('.context-menu-item').on('mouseenter', function (e) {
+            // mark other items as inactive
+            $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
+            console.log("remove active", contextMenu)
+            // mark this item as active
+            $(this).addClass('context-menu-item-active');
+            console.log("make active", contextMenu)
+            // close any submenu that doesn't belong to this item
+            $(`.context-menu[data-parent-id="${menu_id}"]`).remove();
+            console.log("remove submenu", contextMenu)
+            // mark this context menu as active after 2 seconds if submenu is open
         
-    })
+
+            // $(contextMenu).addClass('context-menu-active');
+            // console.log("make menu active", contextMenu)
+            //if submenu is open
+            
+        })
+
+        $(contextMenu).find('.context-menu-item').on('mouseleave', function (e) {
+            console.log("mouseleave", contextMenu)
+            if($(this).attr('data-has-submenu')){
+                $(contextMenu).removeClass('context-menu-active');
+                setTimeout(() => {
+                    console.log("submenu is open", contextMenu)
+                    $(contextMenu).addClass('context-menu-active');
+                } , 2000);    
+            }
+           
+        })
+    }
+    //if submenu is open make context menu active after 2 seconds
+    // if(options.is_submenu){
+    //     console.log("submenu is open", contextMenu)
+    //     $(contextMenu).removeClass('context-menu-active');
+    //     setTimeout(() => {
+    //         $(contextMenu).addClass('context-menu-active');
+    //     } , 2000);    
+    // }
+
+
+   
+
 
     // open submenu if applicable
     $(`#context-menu-${menu_id} > li.context-menu-item-submenu`).on('mouseover', function (e) {
-        
+        console.log("submenu mouseover", contextMenu)
+        console.log("this", this)
+
         // open submenu only if it's not already open
         if($(`.context-menu[data-id="${menu_id}-${$(this).attr('data-action')}"]`).length === 0){
             let item_rect_box = this.getBoundingClientRect();
+
+            // // remove active class from other items
+            // $(contextMenu).removeClass('context-menu-active');
             
             // close other submenus
             $(`.context-menu[parent-element-id="${menu_id}"]`).remove();
@@ -214,7 +235,7 @@ function UIContextMenu(options){
         return false;    
     });
 
-    // useful in cases such as where a menue item is over a window, this prevents from the mousedown event
+    // useful in cases such as where a menu item is over a window, this prevents from the mousedown event
     // reaching the window underneath
     $(`#context-menu-${menu_id} > li:not(.context-menu-item-disabled)`).on('mousedown', function (e) {
         e.preventDefault();
