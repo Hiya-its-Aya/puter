@@ -154,14 +154,12 @@ function UIContextMenu(options){
 
 
 
-   
 
     
-
-    //if conxtext menu is active
-    if($(contextMenu).hasClass('context-menu-active')){
-        //and when mouse is over an item
-        $(contextMenu).find('.context-menu-item').on('mouseenter', function (e) {
+    //when mouse enters an item
+    $(contextMenu).find('.context-menu-item').on('mouseenter', function (e) {
+         //and if conxtext menu is active
+        if($(contextMenu).hasClass('context-menu-active')){
             // mark other items as inactive
             $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
             console.log("remove active", contextMenu)
@@ -177,21 +175,25 @@ function UIContextMenu(options){
             // $(contextMenu).addClass('context-menu-active');
             // console.log("make menu active", contextMenu)
             //if submenu is open
-            
-        })
 
-        $(contextMenu).find('.context-menu-item').on('mouseleave', function (e) {
-            console.log("mouseleave", contextMenu)
-            if($(this).attr('data-has-submenu')){
-                $(contextMenu).removeClass('context-menu-active');
-                setTimeout(() => {
-                    console.log("submenu is open", contextMenu)
-                    $(contextMenu).addClass('context-menu-active');
-                } , 2000);    
-            }
-           
-        })
-    }
+            //on mouse leave
+        }
+    })
+
+    //when mouse leaves an item
+    $(contextMenu).find('.context-menu-item').on('mouseleave', function (e) {
+        console.log("mouseleave", contextMenu)
+        // if submenu is open
+        if($(this).attr('data-has-submenu')){
+            // $(contextMenu).removeClass('context-menu-active');   
+            let timeout = setTimeout(() => {
+                clearTimeout(timeout);   
+                console.log("menu is now active", contextMenu)
+                $(contextMenu).addClass('context-menu-active');
+            }, 100); 
+        }
+    })
+  
     //if submenu is open make context menu active after 2 seconds
     // if(options.is_submenu){
     //     console.log("submenu is open", contextMenu)
@@ -215,7 +217,7 @@ function UIContextMenu(options){
             let item_rect_box = this.getBoundingClientRect();
 
             // // remove active class from other items
-            // $(contextMenu).removeClass('context-menu-active');
+            $(contextMenu).removeClass('context-menu-active');
             
             // close other submenus
             $(`.context-menu[parent-element-id="${menu_id}"]`).remove();
