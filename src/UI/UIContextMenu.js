@@ -150,6 +150,8 @@ function UIContextMenu(options){
 
     // when mouse is over an item
     $(contextMenu).find('.context-menu-item').on('mouseover', function (e) {
+        let timeout;
+        clearTimeout(timeout);  
          //and if conxtext menu is active
         if($(contextMenu).hasClass('context-menu-active')){
             // mark other items as inactive
@@ -164,11 +166,10 @@ function UIContextMenu(options){
             // mark this context menu as active after .7 seconds if submenu is open
             if($(this).attr('data-has-submenu') === 'true'){
                 // $(contextMenu).removeClass('context-menu-active');   
-                let timeout = setTimeout(() => {
+                timeout = setTimeout(() => {
                     console.log("menu is now active", contextMenu)
                     $(contextMenu).addClass('context-menu-active');
-                    clearTimeout(timeout);  
-                }, 300);    
+                }, 700);    
             }   
         }
     })
