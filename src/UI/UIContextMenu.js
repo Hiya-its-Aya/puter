@@ -151,9 +151,10 @@ function UIContextMenu(options){
     // when mouse is over an item
     $(contextMenu).find('.context-menu-item').on('mouseover', function (e) {
         let timeout;
-        clearTimeout(timeout);  
+          
          //and if conxtext menu is active
         if($(contextMenu).hasClass('context-menu-active')){
+            clearTimeout(timeout);
             // mark other items as inactive
             $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
             console.log("remove active", contextMenu)
