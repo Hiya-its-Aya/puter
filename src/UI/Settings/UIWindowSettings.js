@@ -39,6 +39,7 @@ async function UIWindowSettings(options){
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="usage" style="background-image: url(${icons['speedometer-outline.svg']});">${i18n('usage')}</div>`;
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="account" style="background-image: url(${icons['user.svg']});">${i18n('account')}</div>`;
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="language" style="background-image: url(${icons['language.svg']});">${i18n('language')}</div>`;
+                h += `<div class="settings-sidebar-item disable-user-select" data-settings="personalization" style="background-image: url(${icons['palette-outline.svg']});">${i18n('personalization')}</div>`;
             h += `</div>`;
 
             // content
@@ -185,6 +186,23 @@ async function UIWindowSettings(options){
                     h += `<div class="language-list">`;
                         for (let lang of available_languages) {
                             h += `<div class="language-item ${window.locale === lang.code ? 'active': ''}" data-lang="${lang.code}" data-english-name="${html_encode(lang.english_name)}">${lang.name}</div>`;
+                        }
+                    h += `</div>`;
+
+                h += `</div>`;
+
+                // Personalization
+                h += `<div class="settings-content" data-settings="personalization">`;
+                    h += `<h1>Personalization</h1>`;
+                    // search
+                    h += `<div class="search-container" style="margin-bottom: 10px;">`;
+                        h += `<input type="text" class="search" placeholder="Search">`;
+                    h += `</div>`;
+                    // list of languages
+                    const themes = ['light', 'dark'];
+                    h += `<div class="theme-list">`;
+                        for (let theme of themes) {
+                            h += `<div class="theme-item"}">${theme}</div>`;
                         }
                     h += `</div>`;
 
