@@ -969,7 +969,7 @@ window.initgui = async function(){
             && !$(e.target).hasClass('launch-search') 
             && !$(e.target).hasClass('launch-search-clear') 
             && $(e.target).closest('.start-app').length === 0  
-            && !isMobile.phone && !isMobile.table
+            && !isMobile.phone && !isMobile.tablet
             && !$(e.target).hasClass('popover')
             && $(e.target).parents('.popover').length === 0){
 
@@ -1697,35 +1697,6 @@ window.initgui = async function(){
         }
     });
 
-    $(document).on('click', '.remove-permission-link', async function(e){
-        const el_remove_perm_link= this;
-        const perm_uid = $(el_remove_perm_link).attr('data-perm-uid');
-        $.ajax({
-            url: api_origin + "/remove-perm",
-            type: 'POST',
-            async: true,
-            contentType: "application/json",
-            data: JSON.stringify({
-                uid: perm_uid,
-            }),
-            headers: {
-                "Authorization": "Bearer "+auth_token
-            },
-            statusCode: {
-                401: function () {
-                    logout();
-                },
-            },        
-            success: async function (res){
-                $(`[data-perm-uid="${perm_uid}"]`).hide("slide", { direction: "right" }, 300, function(e){
-                    $(this).remove();
-                });
-            },
-            complete: function(){
-            }
-        })
-    })
-
     // update mouse position coordinates
     $(document).mousemove(function(event){
         mouseX = event.clientX;
@@ -1870,7 +1841,7 @@ window.initgui = async function(){
      */
     $(document).on("logout", async function(event) {
         // is temp user?
-        if(window.user && window.user.is_temp){
+        if(window.user && window.user.is_temp && !window.user.deleted){
             const alert_resp = await UIAlert({
                 message: `<strong>Save account before logging out!</strong><p>You are using a temporary account and logging out will erase all your data.</p>`,
                 buttons:[

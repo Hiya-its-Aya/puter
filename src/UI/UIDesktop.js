@@ -34,7 +34,7 @@ import UIWindowQR from "./UIWindowQR.js"
 import UIWindowRefer from "./UIWindowRefer.js"
 import UITaskbar from "./UITaskbar.js"
 import new_context_menu_item from "../helpers/new_context_menu_item.js"
-import changeLanguage from "../i18n/i18nchangeLanguage.js"
+import changeLanguage from "../i18n/i18nChangeLanguage.js"
 import UIWindowSettings from "./Settings/UIWindowSettings.js"
 
 async function UIDesktop(options){
@@ -505,6 +505,7 @@ async function UIDesktop(options){
     const user_preferences = {
         show_hidden_files: JSON.parse(await puter.kv.get('user_preferences.show_hidden_files')),
         language: await puter.kv.get('user_preferences.language'),
+        clock_visible: await puter.kv.get('user_preferences.clock_visible'),
     };
 
     // update default apps
@@ -1028,7 +1029,6 @@ async function UIDesktop(options){
             }
         })
     }
-
 }
 
 $(document).on('contextmenu taphold', '.taskbar', function(event){
@@ -1183,31 +1183,13 @@ $(document).on('click', '.user-options-menu-btn', async function(e){
                 }
             },
             //--------------------------------------------------
-            // Change Username
-            //--------------------------------------------------
-            {
-                html: i18n('change_username'),
-                onClick: async function(){
-                    UIWindowChangeUsername();
-                }
-            },
-
-            //--------------------------------------------------
             // Change Password
             //--------------------------------------------------
             {
-                html: i18n('change_password'),
+                html: i18n('settings'),
                 onClick: async function(){
-                    UIWindowChangePassword();
+                    UIWindowSettings();
                 }
-            },
-
-            //--------------------------------------------------
-            // Change Language
-            //--------------------------------------------------
-            {
-                html: i18n('change_language'),
-                items: supportedLanguagesItems
             },
             //--------------------------------------------------
             // Contact Us
@@ -1397,14 +1379,15 @@ document.addEventListener('fullscreenchange', (event) => {
     // document.fullscreenElement will point to the element that
     // is in fullscreen mode if there is one. If there isn't one,
     // the value of the property is null.
+
     if (document.fullscreenElement) {
         $('.fullscreen-btn').css('background-image', `url(${window.icons['shrink.svg']})`);
         $('.fullscreen-btn').attr('title', 'Exit Full Screen');
-        $('#clock').show();
+        window.user_preferences.clock_visible === 'auto' && $('#clock').show();
     } else {
         $('.fullscreen-btn').css('background-image', `url(${window.icons['fullscreen.svg']})`);
         $('.fullscreen-btn').attr('title', 'Enter Full Screen');
-        $('#clock').hide();
+        window.user_preferences.clock_visible === 'auto' && $('#clock').hide();
     }
 })
 

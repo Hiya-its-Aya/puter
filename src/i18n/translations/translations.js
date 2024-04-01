@@ -17,9 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import ar from './ar.js';
-import bn from './bn.js'
+import bn from './bn.js';
+import br from './br.js';
 import da from './da.js';
-import de from './de.js'
+import de from './de.js';
 import en from './en.js';
 import es from './es.js';
 import fa from './fa.js';
@@ -29,17 +30,23 @@ import hy from './hy.js';
 import it from './it.js';
 import ko from './ko.js';
 import nb from './nb.js';
+import nl from './nl.js';
 import nn from './nn.js';
+import pl from './pl.js';
+import pt from './pt.js';
 import ro from './ro.js';
 import sv from './sv.js';
 import th from './th.js';
-import zh from './zh.js';
 import ur from './ur.js';
+import zh from './zh.js';
 import emoji from './emoji.js';
+
+
 
 export default {
     ar,
     bn,
+    br,
     da,
     de,
     en,
@@ -51,11 +58,14 @@ export default {
     it,
     ko,
     nb,
+    nl,
     nn,
     ro,
+    pl,
+    pt,
     sv,
     th,
     zh,
     ur,
-    emoji
+    emoji,
 };

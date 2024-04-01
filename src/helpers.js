@@ -1932,7 +1932,6 @@ window.launch_app = async (options)=>{
             iframe_url.searchParams.append('puter.item.name', options.filename);
             iframe_url.searchParams.append('puter.item.path', options.file_path ? `~/` + options.file_path.split('/').slice(1).join('/') : undefined);
             iframe_url.searchParams.append('puter.item.read_url', options.readURL);
-            // iframe_url.searchParams.append('puter.item.write_url', file_signature.write_url);
             iframe_url.searchParams.append('puter.domain', window.app_domain);
         }
 
@@ -1947,6 +1946,9 @@ window.launch_app = async (options)=>{
         else if(options.token){
             iframe_url.searchParams.append('puter.auth.token', options.token);
         }
+
+        if(api_origin)
+            iframe_url.searchParams.append('puter.api_origin', api_origin);
 
         // Try to acquire app token from the server
         else{
@@ -2453,50 +2455,6 @@ window.move_items = async function(el_items, dest_path, is_undo = false){
                 }
 
                 if(dest_path === trash_path){
-                    // remove Public Token
-                    // todo, some client-side check to see if this dir has an FR associated with it before sending a whole ajax req
-                    $.ajax({
-                        url: api_origin + "/removepubtok",
-                        type: 'POST',
-                        data: JSON.stringify({ 
-                            uid: $(el_item).attr('data-uid'),
-                        }),
-                        async: true,
-                        contentType: "application/json",
-                        headers: {
-                            "Authorization": "Bearer "+auth_token
-                        },
-                        statusCode: {
-                            401: function () {
-                                logout();
-                            },
-                        },        
-                        success: function (){ 
-                        }  
-                    })
-                    // remove all associated permissions
-                    // todo, some client-side check to see if this dir has an FR associated with it before sending a whole ajax req
-                    $.ajax({
-                        url: api_origin + "/remove-item-perms",
-                        type: 'POST',
-                        data: JSON.stringify({ 
-                            uid: $(el_item).attr('data-uid'),
-                        }),
-                        async: true,
-                        contentType: "application/json",
-                        headers: {
-                            "Authorization": "Bearer "+auth_token
-                        },
-                        statusCode: {
-                            401: function () {
-                                logout();
-                            },
-                        },        
-                        success: function (){ 
-                        }  
-                    })
-                    $(`.item[data-uid="${$(el_item).attr('data-uid')}"]`).find('.item-is-shared').fadeOut(300);
-
                     // if trashing dir... 
                     if($(el_item).attr('data-is_dir') === '1'){
                         // disassociate all its websites
@@ -2506,28 +2464,6 @@ window.move_items = async function(el_items, dest_path, is_undo = false){
                         $(`.mywebsites-dir-path[data-uuid="${$(el_item).attr('data-uid')}"]`).remove();
                         // remove the website badge from all instances of the dir
                         $(`.item[data-uid="${$(el_item).attr('data-uid')}"]`).find('.item-has-website-badge').fadeOut(300);
-
-                        // remove File Rrequest Token
-                        // todo, some client-side check to see if this dir has an FR associated with it before sending a whole ajax req
-                        $.ajax({
-                            url: api_origin + "/removefr",
-                            type: 'POST',
-                            data: JSON.stringify({ 
-                                dir_uid: $(el_item).attr('data-uid'),
-                            }),
-                            async: true,
-                            contentType: "application/json",
-                            headers: {
-                                "Authorization": "Bearer "+auth_token
-                            },
-                            statusCode: {
-                                401: function () {
-                                    logout();
-                                },
-                            },        
-                            success: function (){ 
-                            }  
-                        })
                     }
                 }
 
@@ -3676,4 +3612,25 @@ window.save_desktop_item_positions = ()=>{
 window.delete_desktop_item_positions = ()=>{
     desktop_item_positions = {}
     puter.kv.del('desktop_item_positions');
+}
+
+window.change_clock_visible = (clock_visible) => {
+    let newValue = clock_visible || window.user_preferences.clock_visible;
+    
+    
+    newValue === 'auto' && is_fullscreen() ? $('#clock').show() : $('#clock').hide();
+
+    newValue === 'show' && $('#clock').show();
+    newValue === 'hide' && $('#clock').hide();
+
+    if(clock_visible) {
+        // save clock_visible to user preferences
+        window.mutate_user_preferences({
+            clock_visible: newValue
+        });
+
+        return;
+    }
+
+    $('select.change-clock-visible').val(window.user_preferences.clock_visible);
 }

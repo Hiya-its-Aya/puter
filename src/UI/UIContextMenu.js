@@ -148,12 +148,13 @@ function UIContextMenu(options){
         return false;
     });
 
-    // initialize menuAim plugin (../libs/jquery.menu-aim.js)
+    // Initialize the menuAim plugin (../libs/jquery.menu-aim.js)
     $(contextMenu).menuAim({
+        submenuSelector: ".context-menu-item-submenu",
         submenuDirection: function(){
-            //if not submenu
+            // If not submenu
             if(!options.is_submenu){
-                // if submenu left postiton is greater than main menu left position
+                // if submenu's left postiton is greater than main menu's left position
                 if($(contextMenu).offset().left + 2 * $(contextMenu).width() + 15 < window.innerWidth ){     
                     return "right";
                 } else {
@@ -161,12 +162,10 @@ function UIContextMenu(options){
                 }
             }
         },
-        //activates item when mouse enters depending in mouse position and direction
+        // activates item when mouse enters depending on mouse position and direction
         activate: function (e) {
-
             //activate items
             let item = $(e).closest('.context-menu-item');
-
             // mark other items as inactive
             $(contextMenu).find('.context-menu-item').removeClass('context-menu-item-active');
             // mark this item as active
@@ -176,7 +175,6 @@ function UIContextMenu(options){
             // mark this context menu as active
             $(contextMenu).addClass('context-menu-active');
 
-
             // activate submenu
             // open submenu if applicable
             if($(e).hasClass('context-menu-item-submenu')){
@@ -185,6 +183,17 @@ function UIContextMenu(options){
                 if($(`.context-menu[data-id="${menu_id}-${$(e).attr('data-action')}"]`).length === 0){
                     // close other submenus
                     $(`.context-menu[parent-element-id="${menu_id}"]`).remove();
+
+                    // Calculate the position for the submenu
+                    let submenu_x_pos, submenu_y_pos;
+                    if (isMobile.phone || isMobile.tablet) {
+                        submenu_y_pos = y_pos;
+                        submenu_x_pos = x_pos;
+                    } else {
+                        submenu_y_pos = item_rect_box.top - 5; 
+                        submenu_x_pos = x_pos + item_rect_box.width + 15;
+                    }
+
                     // open the new submenu
                     UIContextMenu({ 
                         items: options.items[parseInt($(e).attr('data-action'))].items,
@@ -192,8 +201,8 @@ function UIContextMenu(options){
                         is_submenu: true,
                         id: menu_id + '-' + $(e).attr('data-action'),
                         position:{
-                            top: item_rect_box.top - 5,
-                            left: x_pos + item_rect_box.width + 15,
+                            top: submenu_y_pos,
+                            left: submenu_x_pos,
                         } 
                     })
                 }
