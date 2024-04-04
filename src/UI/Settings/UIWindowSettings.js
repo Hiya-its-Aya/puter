@@ -41,7 +41,7 @@ async function UIWindowSettings(options){
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="account" style="background-image: url(${icons['user.svg']});">${i18n('account')}</div>`;
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="language" style="background-image: url(${icons['language.svg']});">${i18n('language')}</div>`;
                 h += `<div class="settings-sidebar-item disable-user-select" data-settings="clock" style="background-image: url(${icons['clock.svg']});">${i18n('clock')}</div>`;
-                h += `<div class="settings-sidebar-item disable-user-select" data-settings="personalization" style="background-image: url(${icons['palette-outline.svg']});">${i18n('personalization')}</div>`;
+                h += `<div class="settings-sidebar-item disable-user-select" data-settings="display" style="background-image: url(${icons['palette-outline.svg']});">${i18n('display')}</div>`;
             h += `</div>`;
 
             // content
@@ -140,7 +140,19 @@ async function UIWindowSettings(options){
                         h += `</select>`
                      h += `</div>`
                 h += `</div>`;      
-
+                        
+                // display
+                h += `<div class="settings-content" data-settings="display">`;
+                     h += `<h1>${i18n('Mode')}</h1>`;
+                     h += `<div style="display: flex;align-items: center">`
+                        h += `<span>${i18n('Light Mode')}:</span>`
+                         h += `<select class="change-light-mode" style="margin-left: 10px;flex: 1">`
+                            h += `<option value="dark">${i18n('dark mode')}</option>`
+                            h += `<option value="light">${i18n('light mode')}</option>`
+                            h += `<option value="auto">${i18n('system')}</option>`
+                        h += `</select>`
+                     h += `</div>`
+                h += `</div>`; 
             h += `</div>`;
         h += `</div>`;
         h += `</div>`;
@@ -368,7 +380,17 @@ async function UIWindowSettings(options){
         window.change_clock_visible();
 
         resolve(el_window);
+
+
+        $(el_window).on('change', 'select.change-light-mode', function(e){
+            const $this = $(this);  
+            const value = $this.val();
+
+            console.log(value);
+            window.change_light_mode(value);
+        })
     });
+    
 }
 
 

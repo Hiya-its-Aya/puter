@@ -744,7 +744,6 @@ span.header-sort-icon img {
 }
 
 /* Window */
-
 .window {
     display: none;
     position: absolute;
@@ -760,6 +759,11 @@ span.header-sort-icon img {
     -moz-user-select: none !important;
     -webkit-user-select: none;
 }
+
+/* .dark-mode > * {
+    background-color: #333333 !important;
+    color: white;
+} */
 
 .window[data-is_maximized="1"] {
     transform: none;
