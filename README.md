@@ -29,6 +29,10 @@ Puter is an advanced, open-source internet operating system designed to be featu
 
 ## Getting Started
 
+After reading this section, please proceed to **Self-Hosting** and **Configuration** below.
+Read these instructions carefully or you may see errors due to
+an invalid setup.
+
 ### Local Development
 
 ```bash
@@ -44,16 +48,70 @@ This will launch Puter at http://localhost:4000 (or the next available port).
 
 ### Using Docker
 
+**note:** it is **not** necessary to run this within a clone of this repository. For contributors, it is recommended to use the [Local Development](#local-development) instructions.
+
 ```bash
-git clone https://github.com/HeyPuter/puter
-cd puter
+mkdir puter && cd puter && mkdir -p puter/config puter/data && sudo chown -R 1000:1000 puter && docker run --rm -p 4100:4100 -v `pwd`/puter/config:/etc/puter -v `pwd`/puter/data:/var/puter  ghcr.io/heyputer/puter
+```
+
+### Using Docker Compose
+
+**note:** it is **not** necessary to run this within a clone of this repository. For contributors, it is recommended to use the [Local Development](#local-development) instructions.
+
+```bash
+mkdir puter && cd puter
+mkdir -p puter/config puter/data
+sudo chown -R 1000:1000 puter
+wget https://raw.githubusercontent.com/HeyPuter/puter/main/docker-compose.yml
 docker compose up
 ```
 
 <br/>
 
+See [Configuration](#configuration) for next steps.
+
+<br/>
+
 ## ⚠️ Self-Hosting ⚠️
 The self-hosted version of Puter is currently in alpha stage and should not be used in production yet. It is under active development and may contain bugs, other issues. Please exercise caution and use it for testing and evaluation purposes only.
+
+<br/>
+
+## Configuration
+
+Running the server will generate a configuration file in one of these locations:
+- `config/config.json` when [Using Docker](#using-docker)
+- `volatile/config/config.json` in [Local Development](#local-development)
+- `/etc/puter/config.json` on a server (or within a Docker container)
+
+### Domain Name
+
+To access Puter on your device, you can simply go to the address printed in
+the server console (usually `puter.localhost:4100`).
+
+To access Puter from another device, a domain name must be configured, as well as
+an `api` subdomain. For example, `example.local` might be the domain name pointing
+to the IP address of the server running puter, and `api.example.com` must point to
+this address as well. This domain must be specified in the configuration file
+(usually `volatile/config/config.json`) as well.
+
+See [domain configuration](./doc/self-hosters/domains.md) for more information.
+
+### Configure the Port
+
+- You can specify a custom port by setting `http_port` to a desired value
+- If you're using a reverse-proxy such as nginx or cloudflare, you should
+  also set `pub_port` to the public (external) port (usually `443`)
+
+### Default User
+
+By default, Puter will create a user called `default_user`.
+This user will have a randomly generated password, which will be printed
+in the development console.
+A warning will persist in the dev console until this user's
+password is changed. Please login to this user and change the password as
+your first step. This user by default has 10GB storage instead of the default
+(500MB storage) for new/temporary users.
 
 <br/>
 
