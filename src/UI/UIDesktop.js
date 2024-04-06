@@ -506,6 +506,7 @@ async function UIDesktop(options){
         show_hidden_files: JSON.parse(await puter.kv.get('user_preferences.show_hidden_files')),
         language: await puter.kv.get('user_preferences.language'),
         clock_visible: await puter.kv.get('user_preferences.clock_visible'),
+        light_mode: await puter.kv.get('user_preferences.light_mode'),
     };
 
     // update default apps
@@ -947,6 +948,7 @@ async function UIDesktop(options){
                 // todo
                 // sort_by: $(el_item).attr('data-sort_by'),
                 app: 'explorer',
+                light_mode: window.user_preferences.light_mode,
             });
         }
     }
