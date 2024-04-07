@@ -143,10 +143,9 @@ async function UIWindowSettings(options){
                         
                 // display
                 h += `<div class="settings-content" data-settings="display">`;
-                     h += `<h1>${i18n('Mode')}</h1>`;
+                     h += `<h1>${i18n('Theme')}</h1>`;
                      h += `<div style="display: flex;align-items: center">`
-                        h += `<span>${i18n('Light Mode')}:</span>`
-                         h += `<select class="change-light-mode" style="margin-left: 10px;flex: 1">`
+                         h += `<select class="change-theme" style="margin-left: 10px;flex: 1">`
                             h += `<option value="dark">${i18n('dark mode')}</option>`
                             h += `<option value="light">${i18n('light mode')}</option>`
                             h += `<option value="auto">${i18n('system')}</option>`
@@ -382,12 +381,12 @@ async function UIWindowSettings(options){
         resolve(el_window);
 
 
-        $(el_window).on('change', 'select.change-light-mode', function(e){
+        $(el_window).on('change', 'select.change-theme', function(e){
             const $this = $(this);  
             const value = $this.val();
 
             console.log(value);
-            window.change_light_mode(value);
+            window.change_theme(value);
         })
     });
     

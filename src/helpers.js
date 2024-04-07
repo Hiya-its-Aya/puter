@@ -3654,18 +3654,23 @@ window.change_clock_visible = (clock_visible) => {
 
     $('select.change-clock-visible').val(window.user_preferences.clock_visible);
 }
-//TODO: pass light_mode value into UIWindow and Taskbar, and update CSS accordingly
-window.change_light_mode = (light_mode) => {
-    let newValue = light_mode || window.user_preferences.light_mode; 
-
-    if(light_mode) {
-        // save light_mode to user preferences
+//TODO: pass theme value into UIWindow and Taskbar, and update CSS accordingly
+window.change_theme = (theme) => {
+    let newValue;
+    let initVal = theme || window.user_preferences.theme; 
+    if (initVal === 'auto') {
+        newValue = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } else {
+        newValue = initVal;
+    }
+    if(theme) {
+        // save theme to user preferences
         window.mutate_user_preferences({
-            light_mode: newValue
+            theme: newValue
         });
-        // console.log('light_mode', newValue);
+        console.log('theme', newValue);
         return;
     }
 
-    $('select.change-light-mode').val(window.user_preferences.light_mode);
+    $('select.change-theme').val(window.user_preferences.theme);
 }

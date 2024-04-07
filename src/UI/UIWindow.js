@@ -94,7 +94,7 @@ async function UIWindow(options) {
     options.is_saveFileDialog = options.is_saveFileDialog ?? false;
     options.show_minimize_button = options.show_minimize_button ?? true;
     options.on_close = options.on_close ?? undefined;
-    options.light_mode = options.light_mode ?? "light";
+    options.theme = options.theme ?? "light";
     options.parent_uuid = options.parent_uuid ?? null;
     options.selectable_body = options.selectable_body ?? true;
     options.show_in_taskbar = options.show_in_taskbar ?? true;
@@ -202,6 +202,7 @@ async function UIWindow(options) {
                 data-sort_by ="${options.sort_by ?? 'name'}"
                 data-sort_order ="${options.sort_order ?? 'asc'}"
                 data-multiselectable = "${options.selectable_body}"
+                data-theme = "${options.theme}"
                 data-update_window_url = "${options.update_window_url}"
                 data-initial_zindex = "${zindex}"
                 style=" z-index: ${zindex}; 
