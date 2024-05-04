@@ -50,6 +50,29 @@ const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
     });
     const w_body = w.querySelector('.window-body');
 
+    const Dropdown = ({ label }) => {
+        const wrap = document.createElement('div');
+        const label_el = document.createElement('label');
+        label_el.textContent = label;
+        const el = document.createElement('select');
+        el.classList.add('theme-dialog-dropdown');
+        $('<option>').text(i18n('light')).appendTo(el);
+        $('<option>').text(i18n('dark')).appendTo(el);
+        $('<option>').text(i18n('system')).appendTo(el);
+        wrap.appendChild(label_el);
+        wrap.appendChild(el);
+        return {
+            appendTo (parent) {
+                parent.appendChild(wrap);
+                return this;
+            },
+            onPress (cb) {
+                el.addEventListener('click', cb);
+                return this;
+            },
+        };
+    }
+
     const Button = ({ label }) => {
         const el = document.createElement('button');
         el.textContent = label;
@@ -114,7 +137,12 @@ const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
             svc_theme.reset();
         })
         ;
-
+    Dropdown({ label: i18n('dark_mode') })
+        .appendTo(w_body)
+        // .onPress(() => {
+        //     // svc_theme.reset();
+        // })
+        ;
     Slider({
         label: i18n('hue'),
         name: 'hue', min: 0, max: 360,
