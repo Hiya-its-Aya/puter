@@ -2,6 +2,7 @@ import UIComponentWindow from './UIComponentWindow.js';
 import Button from './Components/Button.js';
 import Flexer from './Components/Flexer.js';
 import Slider from './Components/Slider.js';
+import Dropdown from './Components/Dropdown.js';
 
 const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
     options = options ?? {};
@@ -56,6 +57,9 @@ const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
                     lig_slider.set('value', svc_theme.get('lig'));
                     alpha_slider.set('value', svc_theme.get('alpha'));
                 },
+            }),
+            new Dropdown({
+                label: i18n('dark_mode')
             }),
             hue_slider,
             sat_slider,
