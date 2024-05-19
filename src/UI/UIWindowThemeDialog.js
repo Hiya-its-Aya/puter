@@ -1,13 +1,73 @@
-import UIWindow from "./UIWindow.js";
-import UIWindowColorPicker from "./UIWindowColorPicker.js";
+import UIComponentWindow from './UIComponentWindow.js';
+import Button from './Components/Button.js';
+import Flexer from './Components/Flexer.js';
+import Slider from './Components/Slider.js';
 
 const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
     options = options ?? {};
     const services = globalThis.services;
     const svc_theme = services.get('theme');
 
-    const w = await UIWindow({
+    let state = {};
+
+    const slider_ch = (e) => {
+        state[e.meta.name] = e.target.value;
+        if (e.meta.name === 'lig') {
+            state.light_text = e.target.value < 60 ? true : false;
+        }
+        svc_theme.apply(state);
+    };
+
+    const hue_slider = new Slider({
+        label: i18n('hue'),
+        name: 'hue', min: 0, max: 360,
+        value: svc_theme.get('hue'),
+        on_change: slider_ch,
+    });
+    const sat_slider = new Slider({
+        label: i18n('saturation'),
+        name: 'sat', min: 0, max: 100,
+        value: svc_theme.get('sat'),
+        on_change: slider_ch,
+    });
+    const lig_slider = new Slider({
+        label: i18n('lightness'),
+        name: 'lig', min: 0, max: 100,
+        value: svc_theme.get('lig'),
+        on_change: slider_ch,
+    });
+    const alpha_slider = new Slider({
+        label: i18n('transparency'),
+        name: 'alpha', min: 0, max: 1, step: 0.01,
+        value: svc_theme.get('alpha'),
+        on_change: slider_ch,
+    });
+
+    const component = new Flexer({
+        children: [
+            new Button({
+                label: i18n('reset_colors'),
+                style: 'secondary',
+                on_click: () => {
+                    svc_theme.reset();
+                    state = {};
+                    hue_slider.set('value', svc_theme.get('hue'));
+                    sat_slider.set('value', svc_theme.get('sat'));
+                    lig_slider.set('value', svc_theme.get('lig'));
+                    alpha_slider.set('value', svc_theme.get('alpha'));
+                },
+            }),
+            hue_slider,
+            sat_slider,
+            lig_slider,
+            alpha_slider,
+        ],
+        gap: '10pt',
+    });
+
+    const w = await UIComponentWindow({
         title: i18n('ui_colors'),
+        component,
         icon: null,
         uid: null,
         is_dir: false,
@@ -121,15 +181,15 @@ const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
         };
     };
 
-    const state = {};
+    // const state = {};
 
-    const slider_ch = (e) => {
-        state[e.meta.name] = e.target.value;
-        if (e.meta.name === 'lig') {
-            state.light_text = e.target.value < 60 ? true : false;
-        }
-        svc_theme.apply(state);
-    };
+    // const slider_ch = (e) => {
+    //     state[e.meta.name] = e.target.value;
+    //     if (e.meta.name === 'lig') {
+    //         state.light_text = e.target.value < 60 ? true : false;
+    //     }
+    //     svc_theme.apply(state);
+    // };
 
     Button({ label: i18n('reset_colors') })
         .appendTo(w_body)

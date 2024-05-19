@@ -41,6 +41,8 @@ const WHOAMI_GET = eggspress('/whoami', {
 
     const is_user = actor.type instanceof UserActorType;
 
+    console.log('user?', req.user);
+
     // send user object
     const details = {
         username: req.user.username,
@@ -54,6 +56,7 @@ const WHOAMI_GET = eggspress('/whoami', {
         is_temp: (req.user.password === null && req.user.email === null),
         taskbar_items: await get_taskbar_items(req.user),
         referral_code: req.user.referral_code,
+        otp: !! req.user.otp_enabled,
         ...(req.new_token ? { token: req.token } : {})
     };
 
@@ -98,6 +101,8 @@ WHOAMI_POST.post('/whoami', auth, fs, express.json(), async (req, response, next
     if(req.query.return_desktop_items === 1 || req.query.return_desktop_items === '1' || req.query.return_desktop_items === 'true'){
         // by cached desktop id
         if(req.user.desktop_id){
+            // TODO: Check if used anywhere, maybe remove
+            // eslint-disable-next-line no-undef
             desktop_items = await db.read(
                 `SELECT * FROM fsentries
                 WHERE user_id = ? AND parent_uid = ?`,

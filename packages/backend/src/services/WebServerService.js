@@ -42,6 +42,20 @@ class WebServerService extends BaseService {
         morgan: require('morgan'),
     };
 
+    async ['__on_boot.consolidation'] () {
+        const app = this.app;
+        const services = this.services;
+        await services.emit('install.middlewares.context-aware', { app });
+        await services.emit('install.routes', { app });
+        await services.emit('install.routes-gui', { app });
+    }
+
+    async ['__on_boot.activation'] () {
+        const services = this.services;
+        await services.emit('start.webserver');
+        await services.emit('ready.webserver');
+    }
+
     async ['__on_start.webserver'] () {
         await es_import_promise;
 
@@ -144,7 +158,7 @@ class WebServerService extends BaseService {
 
         // Socket.io middleware for authentication
         socketio.use(async (socket, next) => {
-            if (socket.handshake.query.auth_token) {
+            if (socket.handshake.auth.auth_token) {
                 try {
                     let auth_res = await jwt_auth(socket);
                     // successful auth
@@ -154,7 +168,7 @@ class WebServerService extends BaseService {
                     socket.join(socket.user.id);
                     next();
                 } catch (e) {
-                    console.log('socket auth err');
+                    console.log('socket auth err', e);
                 }
             }
         });

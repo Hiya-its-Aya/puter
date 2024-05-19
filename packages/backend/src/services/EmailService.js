@@ -69,6 +69,17 @@ If this was not you, please contact support@puter.com immediately.
 </p>
         `,
     },
+    'password_change_notification': {
+        subject: '\u{1f511} Password change notification',
+        html: /*html*/`
+        <p>Hi there,</p>
+        <p>
+        We're sending an email to let you know about a change to your account.
+        Your password was recently changed. If this was not you, please contact
+        support@puter.com immediately.
+        </p>
+        `,
+    },
     'email_verification_code': {
         subject: `{{code}} is your confirmation code`,
         html: /*html*/`
@@ -97,6 +108,29 @@ If this was not you, please contact support@puter.com immediately.
         <p>Puter</p>
         `,
     },
+    'enabled_2fa': {
+        subject: '2FA Enabled on your Account',
+        html: `
+        <p>Hi there,</p>
+        <p>We're sending you this email to let you know 2FA was successfully enabled
+        on your account</p>
+        <p>If you did not perform this action please contact support@puter.com
+        immediately</p>
+        <p>Sincerely,</p>
+        <p>Puter</p>
+        `
+    },
+    'disabled_2fa': {
+        subject: '2FA Disabled on your Account',
+        html: `
+        <p>Hi there,</p>
+        <p>We hope you did this on purpose! 2FA Was disabled on your account.</p>
+        <p>If you did not perform this action please contact support@puter.com
+        immediately</p>
+        <p>Sincerely,</p>
+        <p>Puter</p>
+        `
+    }
 }
 
 class Emailservice extends BaseService {

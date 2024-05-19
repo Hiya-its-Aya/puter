@@ -319,6 +319,10 @@ module.exports = class APIError {
             status: 401,
             message: 'This authentication token is not supported here.',
         },
+        'token_expired': {
+            status: 401,
+            message: 'Authentication token has expired.',
+        },
         'account_suspended': {
             status: 403,
             message: 'Account suspended.',
@@ -330,6 +334,40 @@ module.exports = class APIError {
         'access_token_empty_permissions': {
             status: 403,
             message: 'Attempted to create an access token with no permissions.',
+        },
+        'invalid_action': {
+            status: 400,
+            message: ({ action }) => `Invalid action: ${quot(action)}.`,
+        },
+        '2fa_already_enabled': {
+            status: 409,
+            message: '2FA is already enabled.',
+        },
+        '2fa_not_configured': {
+            status: 409,
+            message: '2FA is not configured.',
+        },
+
+        // protected endpoints
+        'too_many_requests': {
+            status: 429,
+            message: 'Too many requests.',
+        },
+        'user_tokens_only': {
+            status: 403,
+            message: 'This endpoint must be requested with a user session',
+        },
+        'temporary_accounts_not_allowed': {
+            status: 403,
+            message: 'Temporary accounts cannot perform this action',
+        },
+        'password_required': {
+            status: 400,
+            message: 'Password is required.',
+        },
+        'password_mismatch': {
+            status: 403,
+            message: 'Password does not match.',
         },
 
         // Object Mapping

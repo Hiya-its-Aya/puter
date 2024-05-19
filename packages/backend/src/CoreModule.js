@@ -201,6 +201,18 @@ const install = async ({ services, app }) => {
 
     const { TokenService } = require('./services/auth/TokenService');
     services.registerService('token', TokenService);
+
+    const { OTPService } = require('./services/auth/OTPService');
+    services.registerService('otp', OTPService);
+
+    const { UserProtectedEndpointsService } = require("./services/web/UserProtectedEndpointsService");
+    services.registerService('__user-protected-endpoints', UserProtectedEndpointsService);
+
+    const { AntiCSRFService } = require('./services/auth/AntiCSRFService');
+    services.registerService('anti-csrf', AntiCSRFService);
+
+    const { LockService } = require('./services/LockService');
+    services.registerService('lock', LockService);
 }
 
 const install_legacy = async ({ services }) => {

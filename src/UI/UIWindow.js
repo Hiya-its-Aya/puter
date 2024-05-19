@@ -477,6 +477,9 @@ async function UIWindow(options) {
     const el_openfiledialog_open_btn = document.querySelector(`#window-${win_id} .openfiledialog-open-btn`);
     const el_directorypicker_select_btn = document.querySelector(`#window-${win_id} .directorypicker-select-btn`);
 
+    // attach optional event listeners
+    el_window.on_before_exit = options.on_before_exit;
+
     // disable menubar by default
     $(el_window).find('.window-menubar').hide();
 
@@ -2083,6 +2086,7 @@ async function UIWindow(options) {
                             html: i18n('empty_trash'),
                             disabled: false,
                             onClick: async function(){
+                                // TODO: Merge this with window.empty_trash()
                                 const alert_resp = await UIAlert({
                                     message: i18n('empty_trash_confirmation'),
                                     buttons:[
@@ -2811,6 +2815,10 @@ $.fn.close = async function(options) {
                     return false;
                 }
             }
+        }
+
+        if ( this.on_before_exit ) {
+            if ( ! await this.on_before_exit() ) return false;
         }
 
         // Process window close if this is a window

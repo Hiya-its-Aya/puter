@@ -104,7 +104,6 @@ class TokenService extends BaseService {
         const secret = this.secret;
 
         const context = this.compression[scope];
-        console.log('original payload', payload)
         const compressed_payload = this._compress_payload(context, payload);
 
         return jwt.sign(compressed_payload, secret, options);
@@ -119,14 +118,13 @@ class TokenService extends BaseService {
         const context = this.compression[scope];
         const payload = jwt.verify(token, secret);
 
-        console.log('payload', payload)
-
         const decoded = this._decompress_payload(context, payload);
-        console.log('decoded', decoded);
         return decoded;
     }
 
     _compress_payload (context, payload) {
+        if ( ! context ) return payload;
+
         const fullkey_to_info = context.fullkey_to_info;
 
         const compressed = {};
@@ -154,6 +152,8 @@ class TokenService extends BaseService {
     }
 
     _decompress_payload (context, payload) {
+        if ( ! context ) return payload;
+
         const fullkey_to_info = context.fullkey_to_info;
         const short_to_fullkey = context.short_to_fullkey;
 
@@ -186,7 +186,7 @@ class TokenService extends BaseService {
     _test ({ assert }) {
         const U1 = '843f1d83-3c30-48c7-8964-62aff1a912d0';
         const U2 = '42e9c36b-8a53-4c3e-8e18-fe549b10a44d';
-        const U3 = 'c22ef816-edb6-47c5-8c41-31c6520fa9e6';
+        const U3 = 'app-c22ef816-edb6-47c5-8c41-31c6520fa9e6';
         // Test compression
         {
             const context = this.compression.auth;
@@ -198,20 +198,20 @@ class TokenService extends BaseService {
             };
             
             const compressed = this._compress_payload(context, payload);
-            assert(() => compressed.u === uuid_compression.encode(U1));
+            assert(() => compressed.u === uuid_compression().encode(U1));
             assert(() => compressed.t === 's');
-            assert(() => compressed.uu === uuid_compression.encode(U2));
-            assert(() => compressed.au === uuid_compression.encode(U3));
+            assert(() => compressed.uu === uuid_compression().encode(U2));
+            assert(() => compressed.au === uuid_compression('app-').encode(U3));
         }
 
         // Test decompression
         {
             const context = this.compression.auth;
             const payload = {
-                u: uuid_compression.encode(U1),
+                u: uuid_compression().encode(U1),
                 t: 's',
-                uu: uuid_compression.encode(U2),
-                au: uuid_compression.encode(U3),
+                uu: uuid_compression().encode(U2),
+                au: uuid_compression('app-').encode(U3),
             };
             
             const decompressed = this._decompress_payload(context, payload);
