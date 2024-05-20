@@ -69,6 +69,8 @@ export default class Dropdown extends Component {
         const value = this.get('value') ?? 'light'; 
         const label = this.get('label') ?? this.get('name');
 
+        console.log(this.get('name'))
+
         $(template).html(/*html*/`
             <div class="dropdown">
                 <label class="dropdown-label">${html_encode(label)}</label>

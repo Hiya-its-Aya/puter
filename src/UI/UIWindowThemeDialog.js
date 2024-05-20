@@ -59,7 +59,10 @@ const UIWindowThemeDialog = async function UIWindowThemeDialog (options) {
                 },
             }),
             new Dropdown({
-                label: i18n('dark_mode')
+                label: i18n('dark_mode'),
+                on_change: () => {
+                    console.log(this.value)
+                }
             }),
             hue_slider,
             sat_slider,
