@@ -29,6 +29,7 @@ const default_values = {
     lig: 93.33,
     alpha: 0.8,
     light_text: false,
+    dark_mode: 'light',
 };
 
 export class ThemeService extends Service {
@@ -43,6 +44,7 @@ export class ThemeService extends Service {
             lig: 93.33,
             alpha: 0.8,
             light_text: false,
+            dark_mode: 'light'
         };
         this.root = document.querySelector(':root');
         // this.ss = new CSSStyleSheet();
@@ -119,7 +121,10 @@ export class ThemeService extends Service {
         this.root.style.setProperty('--primary-saturation', s.sat + '%');
         this.root.style.setProperty('--primary-lightness', s.lig + '%');
         this.root.style.setProperty('--primary-alpha', s.alpha);
+        // TODO: fix text and backgound color triggers for dark mode
         this.root.style.setProperty('--primary-color', s.light_text ? 'white' : '#373e44');
+        this.root.style.setProperty('--secondary-color', s.light_text ? '#fafafa' : '#666d74');
+        this.root.style.setProperty('--primary-background', s.dark_mode ?  '#373e44' : '#fafafa');
 
         // TODO: Should we debounce this to reduce traffic?
         this.#broadcastService.sendBroadcast('themeChanged', {

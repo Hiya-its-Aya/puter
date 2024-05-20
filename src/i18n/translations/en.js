@@ -84,6 +84,7 @@ const en = {
         clock_visible_hide: 'Hide - Always hidden',
         clock_visible_show: 'Show - Always visible',
         clock_visible_auto: 'Auto - Default, visible only in full-screen mode.',
+        dark_mode: "Dark Mode",
         date_modified: 'Date modified',
         default: 'Default',
         delete: 'Delete',
